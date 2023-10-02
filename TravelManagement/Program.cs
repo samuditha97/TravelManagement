@@ -41,6 +41,7 @@ public class Program
         builder.Services.AddSwaggerGen();
         builder.Services.AddScoped<ITravelerService, TravelerRepository>();
         builder.Services.AddScoped<IReservationService, ReservationRepository>();
+        builder.Services.AddScoped<ITrainScheduleService, TrainScheduleRepository>();
 
         var app = builder.Build();
 
