@@ -22,6 +22,18 @@ public class Program
         // Add services to the container.
         builder.Services.AddControllers();
 
+        // Configure CORS to allow any origin.
+        builder.Services.AddCors(options =>
+        {
+            options.AddPolicy("AllowAnyOrigin", builder =>
+            {
+                builder
+                    .AllowAnyOrigin()  // Allow requests from any origin (CORS wildcard)
+                    .AllowAnyHeader()
+                    .AllowAnyMethod();
+            });
+        });
+
         // Configure MongoDB settings and register MongoDB client and database.
         builder.Services.Configure<MongoDbSettings>(configuration.GetSection(nameof(MongoDbSettings)));
         builder.Services.AddSingleton<IMongoClient>(sp =>
@@ -65,6 +77,9 @@ public class Program
         app.UseHttpsRedirection();
         app.UseAuthorization();
         app.UseRouting();
+
+        // Use CORS middleware to allow any origin.
+        app.UseCors("AllowAnyOrigin");
 
         app.UseEndpoints(endpoints =>
         {
