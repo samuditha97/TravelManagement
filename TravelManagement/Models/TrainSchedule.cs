@@ -11,17 +11,12 @@ namespace TravelManagement.Models
         [BsonIgnoreIfDefault]
         public string TrainId { get; set; }
         public string Name { get; set; }
-        public List<Schedule> Schedules { get; set; }
-        public bool IsActive { get; set; }
-    }
-
-    public class Schedule
-    {
         public string StartStation { get; set; }
         public string EndStations { get; set; }
         public DateTime DepartureTime { get; set; }
         public DateTime ArrivalTime { get; set; }
-        
+        public bool IsActive { get; set; }
     }
+
 }
 
