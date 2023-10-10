@@ -22,6 +22,7 @@ public class ReservationRepository : IReservationService
 
         // Perform validation for the reservation
         if (reservation.ReservationDate < DateTime.Now ||
+            reservation.ReservationDate > DateTime.Now.AddDays(30) ||
             existingReservationsCount >= 4 ||
             reservation.TicketCount <= 0)
         {
@@ -41,6 +42,10 @@ public class ReservationRepository : IReservationService
         if (existingReservation == null)
         {
             throw new NotFoundException("Reservation not found or cannot be updated.");
+        }
+        if (existingReservation.ReservationDate <= DateTime.Now.AddDays(5))
+        {
+            throw new InvalidOperationException("Reservation cannot be updated less than 5 days before the reservation date.");
         }
 
         // Do not allow updates to ReferenceId
@@ -63,7 +68,7 @@ public class ReservationRepository : IReservationService
     {
         var existingReservation = await GetReservation(referenceId);
 
-        if (existingReservation == null || (existingReservation.IsCanceled ?? false) || (existingReservation.ReservationDate <= DateTime.Now))
+        if (existingReservation == null || (existingReservation.IsCanceled ?? false) || (existingReservation.ReservationDate <= DateTime.Now) || (existingReservation.ReservationDate <= DateTime.Now.AddDays(5)))
         {
             throw new NotFoundException("Reservation not found or cannot be canceled.");
         }

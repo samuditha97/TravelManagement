@@ -18,6 +18,7 @@ namespace TravelManagement.Repositories
 
         public async Task CreateTrainSchedule(TrainSchedule trainSchedule)
         {
+            trainSchedule.TrainId = GenerateTrainId();
             await _collection.InsertOneAsync(trainSchedule);
         }
 
@@ -42,6 +43,19 @@ namespace TravelManagement.Repositories
         {
             var filter = Builders<TrainSchedule>.Filter.Eq(ts => ts.TrainId, trainSchedule.TrainId);
             await _collection.ReplaceOneAsync(filter, trainSchedule);
+        }
+
+        private string GenerateTrainId()
+        {
+
+            Random random = new Random();
+
+            int minValue = 10000;
+            int maxValue = 99999;
+
+            int randomValue = random.Next(minValue, maxValue);
+
+            return randomValue.ToString();
         }
     }
 }

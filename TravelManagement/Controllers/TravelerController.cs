@@ -41,6 +41,18 @@ namespace TravelManagement.Controllers
         {
             try
             {
+ 
+                var existingTraveler = await _travelerRepository.GetTravelerByNICAsync(traveler.NIC);
+                if (existingTraveler != null)
+                {
+
+                    var conflictResult = new ObjectResult("A traveler with the same NIC already exists.")
+                    {
+                        StatusCode = StatusCodes.Status409Conflict 
+                    };
+                    return conflictResult;
+                }
+
                 await _travelerRepository.CreateTravelerAsync(traveler);
                 return CreatedAtAction(nameof(GetTraveler), new { nic = traveler.NIC }, traveler);
             }
@@ -50,6 +62,7 @@ namespace TravelManagement.Controllers
                 return StatusCode(500, "An error occurred while processing the request.");
             }
         }
+
 
         [HttpPut("{nic}")]
         public async Task<IActionResult> UpdateTraveler(string nic, Traveler traveler)
