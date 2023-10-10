@@ -1,3 +1,4 @@
+
 ﻿using Microsoft.AspNetCore.Authentication.JwtBearer;
 using System.Text;
 using Microsoft.AspNetCore.Builder;
@@ -54,6 +55,7 @@ public class Program
 
         // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
         builder.Services.AddEndpointsApiExplorer();
+
         // Inside the ConfigureServices method in Startup.cs
         builder.Services.AddSwaggerGen(c =>
         {
@@ -104,6 +106,8 @@ public class Program
         builder.Services.AddScoped<IReservationService, ReservationRepository>();
         builder.Services.AddScoped<ITrainScheduleService, TrainScheduleRepository>();
         builder.Services.AddScoped<IUsersService, UsersRepository>();
+        builder.Services.AddSwaggerGen();
+ 
 
         var app = builder.Build();
 
@@ -113,17 +117,19 @@ public class Program
         BsonClassMap.RegisterClassMap<Traveler>(cm =>
         {
             cm.AutoMap();
+
             cm.SetIdMember(cm.GetMemberMap(c => c.NIC));
         });
 
-        // Configure the HTTP request pipeline.
+
+
         if (app.Environment.IsDevelopment())
         {
             app.UseSwagger();
             app.UseSwaggerUI();
         }
 
-        // Use CORS middleware to allow any origin.
+
         app.UseCors("AllowAnyOrigin");
 
         app.UseHttpsRedirection();
@@ -132,6 +138,12 @@ public class Program
         // Use authentication and authorization middleware
         app.UseAuthentication();
         app.UseAuthorization();
+        app.UseHttpsRedirection();
+        app.UseRouting();
+
+        // Use CORS middleware to allow any origin.
+        app.UseCors("AllowAnyOrigin");
+
 
         app.UseEndpoints(endpoints =>
         {
