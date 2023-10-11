@@ -1,5 +1,6 @@
 ﻿using System;
 using Microsoft.AspNetCore.Mvc;
+using TravelManagement.DTO;
 using TravelManagement.Interfaces;
 using TravelManagement.Models;
 using TravelManagement.Repositories;
@@ -18,7 +19,7 @@ namespace TravelManagement.Controllers
         }
 
         [HttpGet("{nic}")]
-        public async Task<ActionResult<Traveler>> GetTraveler(string nic)
+        public async Task<ActionResult<TravelerDetailDTO>> GetTraveler(string nic)
         {
             try
             {
@@ -27,7 +28,18 @@ namespace TravelManagement.Controllers
                 {
                     return NotFound("Traveler not found");
                 }
-                return Ok(traveler);
+
+                var travelerDTO = new TravelerDetailDTO
+                {
+                    NIC = traveler.NIC,
+                    FirstName = traveler.FirstName,
+                    LastName = traveler.LastName,
+                    Email = traveler.Email,
+                    MobileNo = traveler.MobileNo,
+                    IsActive = traveler.IsActive ? "Active" : "Inactive"
+                };
+
+                return Ok(travelerDTO);
             }
             catch (Exception ex)
             {
@@ -35,6 +47,7 @@ namespace TravelManagement.Controllers
                 return StatusCode(500, "An error occurred while processing the request.");
             }
         }
+
 
         [HttpPost]
         public async Task<IActionResult> CreateTraveler(Traveler traveler)
@@ -115,7 +128,17 @@ namespace TravelManagement.Controllers
             try
             {
                 var travelers = await _travelerRepository.GetAllTravelersAsync();
-                return Ok(travelers);
+                var travelerDTOs = travelers.Select(traveler => new TravelerDetailDTO
+                {
+                    NIC = traveler.NIC,
+                    FirstName = traveler.FirstName,
+                    LastName = traveler.LastName,
+                    Email = traveler.Email,
+                    MobileNo = traveler.MobileNo,
+                    IsActive = traveler.IsActive ? "Active" : "Inactive"
+                });
+
+                return Ok(travelerDTOs);
             }
             catch (Exception ex)
             {

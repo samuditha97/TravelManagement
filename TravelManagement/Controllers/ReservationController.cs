@@ -2,6 +2,7 @@
 using System;
 using System.Collections.Generic;
 using System.Threading.Tasks;
+using TravelManagement.DTO;
 using TravelManagement.Interfaces;
 using TravelManagement.Models;
 using TravelManagement.Repositories;
@@ -68,7 +69,20 @@ namespace TravelManagement.Controllers
 
             if (reservation != null)
             {
-                return Ok(reservation);
+                var reservationDTO = new ReservationDetailDTO
+                {
+                    ReferenceId = reservation.ReferenceId,
+                    TrainId = reservation.TrainId,
+                    Train = reservation.Train,
+                    TrainClass = reservation.TrainClass,
+                    TicketCount = reservation.TicketCount,
+                    CheckIn = reservation.CheckIn,
+                    CheckOut = reservation.CheckOut,
+                    ReservationDate = reservation.ReservationDate,
+                    IsCanceled = reservation.IsCanceled.HasValue ? (reservation.IsCanceled.Value ? "Canceled" : "Not Canceled") : "Unknown"
+                };
+
+                return Ok(reservationDTO);
             }
 
             return NotFound("Reservation not found.");
@@ -78,7 +92,20 @@ namespace TravelManagement.Controllers
         public async Task<IActionResult> GetAllReservations()
         {
             var reservations = await _reservationService.GetAllReservations();
-            return Ok(reservations);
+            var reservationDTOs = reservations.Select(reservation => new ReservationDetailDTO
+            {
+                ReferenceId = reservation.ReferenceId,
+                TrainId = reservation.TrainId,
+                Train = reservation.Train,
+                TrainClass = reservation.TrainClass,
+                TicketCount = reservation.TicketCount,
+                CheckIn = reservation.CheckIn,
+                CheckOut = reservation.CheckOut,
+                ReservationDate = reservation.ReservationDate,
+                IsCanceled = reservation.IsCanceled.HasValue ? (reservation.IsCanceled.Value ? "Canceled" : "Not Canceled") : "Unknown"
+            });
+
+            return Ok(reservationDTOs);
         }
     }
 }

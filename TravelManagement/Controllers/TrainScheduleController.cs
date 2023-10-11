@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
+using TravelManagement.DTO;
 using TravelManagement.Interfaces;
 using TravelManagement.Models;
 
@@ -19,12 +20,23 @@ namespace TravelManagement.Controllers
         }
 
         [HttpGet]
-        public async Task<ActionResult<IEnumerable<TrainSchedule>>> GetAllTrainSchedules()
+        public async Task<ActionResult<IEnumerable<TrainScheduleDTO>>> GetAllTrainSchedules()
         {
             try
             {
                 var trainSchedules = await _service.GetAllTrainSchedules();
-                return Ok(trainSchedules);
+                var trainSchedulesDTO = trainSchedules.Select(ts => new TrainScheduleDTO
+                {
+                    TrainId = ts.TrainId,
+                    Name = ts.Name,
+                    StartStation = ts.StartStation,
+                    EndStations = ts.EndStations,
+                    DepartureTime = ts.DepartureTime,
+                    ArrivalTime = ts.ArrivalTime,
+                    IsActive = ts.IsActive ? "Active" : "Inactive" // Convert bool to string
+                }).ToList();
+
+                return Ok(trainSchedulesDTO);
             }
             catch (Exception ex)
             {
@@ -33,8 +45,9 @@ namespace TravelManagement.Controllers
             }
         }
 
+
         [HttpGet("{trainId}")]
-        public async Task<ActionResult<TrainSchedule>> GetTrainSchedule(string trainId)
+        public async Task<ActionResult<TrainScheduleDTO>> GetTrainSchedule(string trainId)
         {
             try
             {
@@ -43,7 +56,19 @@ namespace TravelManagement.Controllers
                 {
                     return NotFound("Train schedule not found");
                 }
-                return Ok(trainSchedule);
+
+                var trainScheduleDTO = new TrainScheduleDTO
+                {
+                    TrainId = trainSchedule.TrainId,
+                    Name = trainSchedule.Name,
+                    StartStation = trainSchedule.StartStation,
+                    EndStations = trainSchedule.EndStations,
+                    DepartureTime = trainSchedule.DepartureTime,
+                    ArrivalTime = trainSchedule.ArrivalTime,
+                    IsActive = trainSchedule.IsActive ? "Active" : "Inactive"
+                };
+
+                return Ok(trainScheduleDTO);
             }
             catch (Exception ex)
             {
@@ -51,6 +76,7 @@ namespace TravelManagement.Controllers
                 return StatusCode(500, "An error occurred while processing the request.");
             }
         }
+
 
         [HttpPost]
         public async Task<IActionResult> CreateTrainSchedule([FromBody] TrainSchedule trainSchedule)
