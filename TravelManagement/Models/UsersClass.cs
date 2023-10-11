@@ -18,7 +18,10 @@ namespace TravelManagement.Models
 
             [BsonElement("Role")]
             public string Role { get; set; }
-        
-	}
+
+            [BsonElement("NIC")]
+            public string NIC { get; set; }
+
+    }
 }
 

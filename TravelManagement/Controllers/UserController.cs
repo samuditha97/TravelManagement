@@ -60,7 +60,7 @@ namespace TravelManagement.Controllers
                 // Create JWT token for authenticated user.
                 var token = GenerateJwtToken(user);
 
-                return Ok(new { Message = "Login successful", Token = token });
+                return Ok(new { Message = "Login successful", Token = token, NIC = user.NIC });
             }
             catch (Exception ex)
             {
