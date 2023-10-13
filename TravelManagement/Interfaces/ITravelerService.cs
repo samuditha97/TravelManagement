@@ -3,6 +3,7 @@ using TravelManagement.Models;
 
 namespace TravelManagement.Interfaces
 {
+    //traveler interface
 	public interface ITravelerService
 	{
         Task<Traveler> GetTravelerByNICAsync(string nic);

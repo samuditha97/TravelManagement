@@ -1,6 +1,7 @@
 ﻿using System;
 namespace TravelManagement.DTO
 {
+    //traveler detail dto
 	public class TravelerDetailDTO
 	{
         public string NIC { get; set; }

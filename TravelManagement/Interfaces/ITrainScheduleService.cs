@@ -3,6 +3,7 @@ using TravelManagement.Models;
 
 namespace TravelManagement.Interfaces
 {
+    //train schedule interface
 	public interface ITrainScheduleService
 	{
         Task<IEnumerable<TrainSchedule>> GetAllTrainSchedules();

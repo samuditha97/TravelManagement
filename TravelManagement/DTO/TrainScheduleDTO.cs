@@ -1,6 +1,7 @@
 ﻿using System;
 namespace TravelManagement.DTO
 {
+    //train schedule dto
 	public class TrainScheduleDTO
 	{
         public string TrainId { get; set; }

@@ -4,6 +4,7 @@ using MongoDB.Bson.Serialization.Attributes;
 
 namespace TravelManagement.Models
 {
+    //user authentication class
 	public class UsersClass
 	{
 		

@@ -24,6 +24,7 @@ namespace TravelManagement.Controllers
             _userService = userService;
         }
 
+        // POST api/user/register
         [AllowAnonymous]
         [HttpPost("register")]
         public async Task<IActionResult> Register([FromBody] UsersClass user)
@@ -44,6 +45,7 @@ namespace TravelManagement.Controllers
             }
         }
 
+        // POST api/user/login
         [AllowAnonymous]
         [HttpPost("login")]
         public async Task<IActionResult> Login([FromBody] UsersClass model)
@@ -68,6 +70,7 @@ namespace TravelManagement.Controllers
             }
         }
 
+        // GET api/user/admin-dashboard
         [Authorize(Roles = "Admin")]
         [HttpGet("admin-dashboard")]
         public IActionResult AdminDashboard()
@@ -75,12 +78,15 @@ namespace TravelManagement.Controllers
             return Ok(new { Message = "Welcome to the Admin Dashboard" });
         }
 
+        // GET api/user/travel-agent-dashboard
         [Authorize(Roles = "TravelAgent")]
         [HttpGet("travel-agent-dashboard")]
         public IActionResult TravelAgentDashboard()
         {
             return Ok(new { Message = "Welcome to the Travel Agent Dashboard" });
         }
+
+        // Generates a JWT token for the authenticated user.
 
         private string GenerateJwtToken(UsersClass user)
         {

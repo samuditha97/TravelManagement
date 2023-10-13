@@ -19,11 +19,13 @@ namespace TravelManagement.Controllers
             _service = service;
         }
 
+        // GET api/trainschedule
         [HttpGet]
         public async Task<ActionResult<IEnumerable<TrainScheduleDTO>>> GetAllTrainSchedules()
         {
             try
             {
+                // Get all train schedules
                 var trainSchedules = await _service.GetAllTrainSchedules();
                 var trainSchedulesDTO = trainSchedules.Select(ts => new TrainScheduleDTO
                 {
@@ -45,12 +47,13 @@ namespace TravelManagement.Controllers
             }
         }
 
-
+        // GET api/trainschedule/{trainId}
         [HttpGet("{trainId}")]
         public async Task<ActionResult<TrainScheduleDTO>> GetTrainSchedule(string trainId)
         {
             try
             {
+                // Get a specific train schedule by ID
                 var trainSchedule = await _service.GetTrainScheduleById(trainId);
                 if (trainSchedule == null)
                 {
@@ -77,7 +80,7 @@ namespace TravelManagement.Controllers
             }
         }
 
-
+        // POST api/trainschedule
         [HttpPost]
         public async Task<IActionResult> CreateTrainSchedule([FromBody] TrainSchedule trainSchedule)
         {
@@ -87,6 +90,7 @@ namespace TravelManagement.Controllers
                 {
                     return BadRequest("Invalid data.");
                 }
+                // Create a new train schedule
                 await _service.CreateTrainSchedule(trainSchedule);
                 return CreatedAtAction(nameof(GetTrainSchedule), new { trainId = trainSchedule.TrainId }, trainSchedule);
             }
@@ -97,6 +101,7 @@ namespace TravelManagement.Controllers
             }
         }
 
+        // PUT api/trainschedule/{trainId}
         [HttpPut("{trainId}")]
         public async Task<IActionResult> UpdateTrainSchedule(string trainId, [FromBody] TrainSchedule trainSchedule)
         {
@@ -106,11 +111,13 @@ namespace TravelManagement.Controllers
                 {
                     return BadRequest("Invalid data.");
                 }
+                // Check if the train schedule exists
                 var existingTrainSchedule = await _service.GetTrainScheduleById(trainId);
                 if (existingTrainSchedule == null)
                 {
                     return NotFound("Train schedule not found");
                 }
+                // Update the train schedule
                 await _service.UpdateTrainSchedule(trainSchedule);
                 return NoContent();
             }
@@ -121,16 +128,19 @@ namespace TravelManagement.Controllers
             }
         }
 
+        // DELETE api/trainschedule/{trainId}
         [HttpDelete("{trainId}")]
         public async Task<IActionResult> DeleteTrainSchedule(string trainId)
         {
             try
             {
+                // Check if the train schedule exists
                 var existingTrainSchedule = await _service.GetTrainScheduleById(trainId);
                 if (existingTrainSchedule == null)
                 {
                     return NotFound("Train schedule not found");
                 }
+                // Delete the train schedule
                 await _service.DeleteTrainSchedule(trainId);
                 return NoContent();
             }

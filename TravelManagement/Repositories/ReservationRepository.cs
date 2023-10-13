@@ -15,6 +15,7 @@ public class ReservationRepository : IReservationService
         _reservationCollection = db.GetCollection<Reservation>("Reservations");
     }
 
+    // Create a new reservation.
     public async Task CreateReservation(Reservation reservation)
     {
         // Check if there are already 4 reservations with the same ReferenceId
@@ -34,7 +35,7 @@ public class ReservationRepository : IReservationService
         await _reservationCollection.InsertOneAsync(reservation);
     }
 
-
+    // Update an existing reservation.
     public async Task UpdateReservation(string referenceId, Reservation updatedReservation)
     {
         var existingReservation = await GetReservation(referenceId);
@@ -64,6 +65,7 @@ public class ReservationRepository : IReservationService
         await _reservationCollection.UpdateOneAsync(filter, update);
     }
 
+    // Cancel an existing reservation.
     public async Task CancelReservation(string referenceId)
     {
         var existingReservation = await GetReservation(referenceId);
@@ -79,29 +81,27 @@ public class ReservationRepository : IReservationService
         await _reservationCollection.UpdateOneAsync(filter, update);
     }
 
-
+    // Get a single reservation by ReferenceId.
     public async Task<Reservation> GetReservation(string referenceId)
     {
         return await _reservationCollection.Find(r => r.ReferenceId == referenceId).FirstOrDefaultAsync();
     }
 
+    // Get a list of all reservations.
     public async Task<IEnumerable<Reservation>> GetAllReservations()
     {
         var reservations = await _reservationCollection.Find(_ => true).ToListAsync();
         return reservations;
     }
 
+    // Generate a unique ReferenceId for a reservation.
     private string GenerateReferenceId()
     {
-
         Random random = new Random();
-
         int minValue = 10000;
         int maxValue = 99999;
-
         int randomValue = random.Next(minValue, maxValue);
 
         return randomValue.ToString();
     }
-
 }

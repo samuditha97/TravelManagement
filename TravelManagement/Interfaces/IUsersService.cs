@@ -3,6 +3,7 @@ using TravelManagement.Models;
 
 namespace TravelManagement.Interfaces
 {
+    //user interface
 	public interface IUsersService
 	{
         Task<UsersClass> RegisterAsyn(UsersClass user);

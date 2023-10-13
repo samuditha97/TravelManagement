@@ -4,6 +4,7 @@ using MongoDB.Bson.Serialization.Attributes;
 
 namespace TravelManagement.Models
 {
+    //train schedule class
 	public class TrainSchedule
 	{
         [BsonId]

@@ -18,11 +18,13 @@ namespace TravelManagement.Controllers
             _travelerRepository = travelerRepository;
         }
 
+        // GET api/traveler/{nic}
         [HttpGet("{nic}")]
         public async Task<ActionResult<TravelerDetailDTO>> GetTraveler(string nic)
         {
             try
             {
+                // Get a traveler by NIC
                 var traveler = await _travelerRepository.GetTravelerByNICAsync(nic);
                 if (traveler == null)
                 {
@@ -43,40 +45,40 @@ namespace TravelManagement.Controllers
             }
             catch (Exception ex)
             {
-                // Log the exception
+                // Log and handle exceptions
                 return StatusCode(500, "An error occurred while processing the request.");
             }
         }
 
-
+        // POST api/traveler
         [HttpPost]
         public async Task<IActionResult> CreateTraveler(Traveler traveler)
         {
             try
             {
- 
+                // Check if a traveler with the same NIC already exists
                 var existingTraveler = await _travelerRepository.GetTravelerByNICAsync(traveler.NIC);
                 if (existingTraveler != null)
                 {
-
                     var conflictResult = new ObjectResult("A traveler with the same NIC already exists.")
                     {
-                        StatusCode = StatusCodes.Status409Conflict 
+                        StatusCode = StatusCodes.Status409Conflict
                     };
                     return conflictResult;
                 }
 
+                // Create a new traveler
                 await _travelerRepository.CreateTravelerAsync(traveler);
                 return CreatedAtAction(nameof(GetTraveler), new { nic = traveler.NIC }, traveler);
             }
             catch (Exception ex)
             {
-                // Log the exception
+                // Log and handle exceptions
                 return StatusCode(500, "An error occurred while processing the request.");
             }
         }
 
-
+        // PUT api/traveler/{nic}
         [HttpPut("{nic}")]
         public async Task<IActionResult> UpdateTraveler(string nic, Traveler traveler)
         {
@@ -87,6 +89,7 @@ namespace TravelManagement.Controllers
 
             try
             {
+                // Update a traveler
                 await _travelerRepository.UpdateTravelerAsync(nic, traveler);
                 return NoContent();
             }
@@ -96,16 +99,18 @@ namespace TravelManagement.Controllers
             }
             catch (Exception ex)
             {
-                // Log the exception
+                // Log and handle exceptions
                 return StatusCode(500, "An error occurred while processing the request.");
             }
         }
 
+        // DELETE api/traveler/{nic}
         [HttpDelete("{nic}")]
         public async Task<IActionResult> DeleteTraveler(string nic)
         {
             try
             {
+                // Check if the traveler exists and then delete
                 var existingTraveler = await _travelerRepository.GetTravelerByNICAsync(nic);
                 if (existingTraveler == null)
                 {
@@ -117,16 +122,18 @@ namespace TravelManagement.Controllers
             }
             catch (Exception ex)
             {
-                // Log the exception
+                // Log and handle exceptions
                 return StatusCode(500, "An error occurred while processing the request.");
             }
         }
 
+        // GET api/traveler
         [HttpGet]
         public async Task<ActionResult<IEnumerable<Traveler>>> GetAllTravelers()
         {
             try
             {
+                // Get all travelers and map to DTO
                 var travelers = await _travelerRepository.GetAllTravelersAsync();
                 var travelerDTOs = travelers.Select(traveler => new TravelerDetailDTO
                 {
@@ -142,11 +149,9 @@ namespace TravelManagement.Controllers
             }
             catch (Exception ex)
             {
-                // Log the exception
+                // Log and handle exceptions
                 return StatusCode(500, "An error occurred while processing the request.");
             }
         }
     }
-
 }
-

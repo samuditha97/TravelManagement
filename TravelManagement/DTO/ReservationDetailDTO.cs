@@ -1,6 +1,7 @@
 ﻿using System;
 namespace TravelManagement.DTO
 {
+    //reservation DTO
 	public class ReservationDetailDTO
 	{
         public string ReferenceId { get; set; }

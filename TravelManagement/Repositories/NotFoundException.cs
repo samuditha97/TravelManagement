@@ -1,5 +1,5 @@
 ﻿using System.Runtime.Serialization;
-
+//exception class
 namespace TravelManagement.Repositories
 {
     [Serializable]

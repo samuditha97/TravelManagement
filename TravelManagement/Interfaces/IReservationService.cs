@@ -3,6 +3,7 @@ using TravelManagement.Models;
 
 namespace TravelManagement.Interfaces
 {
+    //reservation interface
 	public interface IReservationService
 	{
         Task CreateReservation(Reservation reservation);

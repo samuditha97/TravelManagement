@@ -4,6 +4,7 @@ using MongoDB.Bson.Serialization.Attributes;
 
 namespace TravelManagement.Models
 {
+    //reservation details class
 	public class Reservation
 	{
         [BsonId]
