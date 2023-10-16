@@ -11,6 +11,10 @@ namespace TravelManagement.Interfaces
         Task CancelReservation(string referenceId);
         Task<Reservation> GetReservation(string referenceId);
         Task<IEnumerable<Reservation>> GetAllReservations();
+        Task<IEnumerable<Reservation>> GetReservationsByNIC(string nic);
+        Task UpdateReservationsByNIC(string nic, Reservation updatedReservation);
+
+
     }
 }
 

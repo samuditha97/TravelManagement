@@ -104,4 +104,28 @@ public class ReservationRepository : IReservationService
 
         return randomValue.ToString();
     }
+
+    // Get reservations by NIC (National Identity Card)
+    public async Task<IEnumerable<Reservation>> GetReservationsByNIC(string nic)
+    {
+        return await _reservationCollection.Find(r => r.NIC == nic).ToListAsync();
+    }
+
+    // Update reservations by NIC (National Identity Card)
+    public async Task UpdateReservationsByNIC(string nic, Reservation updatedReservation)
+    {
+        // Find and update all reservations with the specified NIC
+        var filter = Builders<Reservation>.Filter.Eq(r => r.NIC, nic);
+        var update = Builders<Reservation>.Update
+            .Set(r => r.Train, updatedReservation.Train)
+            .Set(r => r.TrainClass, updatedReservation.TrainClass)
+            .Set(r => r.TicketCount, updatedReservation.TicketCount)
+            .Set(r => r.CheckIn, updatedReservation.CheckIn)
+            .Set(r => r.CheckOut, updatedReservation.CheckOut)
+            .Set(r => r.ReservationDate, updatedReservation.ReservationDate)
+            .Set(r => r.IsCanceled, updatedReservation.IsCanceled);
+
+        await _reservationCollection.UpdateManyAsync(filter, update);
+    }
+
 }

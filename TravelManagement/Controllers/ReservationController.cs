@@ -119,5 +119,52 @@ namespace TravelManagement.Controllers
 
             return Ok(reservationDTOs);
         }
+
+        // GET api/reservation/nic/{nic}
+        [HttpGet("nic/{nic}")]
+        public async Task<IActionResult> GetReservationsByNIC(string nic)
+        {
+            var reservations = await _reservationService.GetReservationsByNIC(nic);
+
+            if (reservations != null && reservations.Any())
+            {
+                var reservationDTOs = reservations.Select(reservation => new ReservationDetailDTO
+                {
+                    ReferenceId = reservation.ReferenceId,
+                    TrainId = reservation.TrainId,
+                    Train = reservation.Train,
+                    TrainClass = reservation.TrainClass,
+                    TicketCount = reservation.TicketCount,
+                    CheckIn = reservation.CheckIn,
+                    CheckOut = reservation.CheckOut,
+                    ReservationDate = reservation.ReservationDate,
+                    IsCanceled = reservation.IsCanceled.HasValue ? (reservation.IsCanceled.Value ? "Canceled" : "Not Canceled") : "Unknown"
+                });
+
+                return Ok(reservationDTOs);
+            }
+
+            return NotFound("No reservations found for the specified NIC.");
+        }
+
+
+        // PUT api/reservation/nic/{nic}
+        [HttpPut("nic/{nic}")]
+        public async Task<IActionResult> UpdateReservationsByNIC(string nic, [FromBody] Reservation updatedReservation)
+        {
+            try
+            {
+                // Attempt to update reservations by NIC
+                await _reservationService.UpdateReservationsByNIC(nic, updatedReservation);
+                return NoContent();
+            }
+            catch (NotFoundException ex)
+            {
+                // Handle errors when updating reservations by NIC
+                return NotFound(ex.Message);
+            }
+        }
+
+
     }
 }

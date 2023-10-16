@@ -5,6 +5,7 @@ namespace TravelManagement.DTO
 	public class ReservationDetailDTO
 	{
         public string ReferenceId { get; set; }
+        public string NIC { get; set; }
         public string TrainId { get; set; }
         public string Train { get; set; }
         public string TrainClass { get; set; }
