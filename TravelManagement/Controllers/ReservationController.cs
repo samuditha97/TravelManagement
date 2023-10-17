@@ -131,6 +131,7 @@ namespace TravelManagement.Controllers
                 var reservationDTOs = reservations.Select(reservation => new ReservationDetailDTO
                 {
                     ReferenceId = reservation.ReferenceId,
+                    Nic = reservation.Nic,
                     TrainId = reservation.TrainId,
                     Train = reservation.Train,
                     TrainClass = reservation.TrainClass,
