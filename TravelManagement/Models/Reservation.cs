@@ -11,7 +11,7 @@ namespace TravelManagement.Models
         [BsonRepresentation(BsonType.String)]
         [BsonIgnoreIfDefault]
         public string ReferenceId { get; set; }
-        public string NIC { get; set; }
+        public string Nic { get; set; }
         public string TrainId { get; set; }
         public string Train { get; set;  }
         public string TrainClass { get; set; }

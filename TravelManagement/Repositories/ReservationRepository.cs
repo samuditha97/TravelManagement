@@ -108,14 +108,14 @@ public class ReservationRepository : IReservationService
     // Get reservations by NIC (National Identity Card)
     public async Task<IEnumerable<Reservation>> GetReservationsByNIC(string nic)
     {
-        return await _reservationCollection.Find(r => r.NIC == nic).ToListAsync();
+        return await _reservationCollection.Find(r => r.Nic == nic).ToListAsync();
     }
 
     // Update reservations by NIC (National Identity Card)
     public async Task UpdateReservationsByNIC(string nic, Reservation updatedReservation)
     {
         // Find and update all reservations with the specified NIC
-        var filter = Builders<Reservation>.Filter.Eq(r => r.NIC, nic);
+        var filter = Builders<Reservation>.Filter.Eq(r => r.Nic, nic);
         var update = Builders<Reservation>.Update
             .Set(r => r.Train, updatedReservation.Train)
             .Set(r => r.TrainClass, updatedReservation.TrainClass)
